@@ -22,17 +22,19 @@ jobs:
         env:
           TZ: Asia/Kolkata
         run: |
-          git config user.name "YOUR_USERNAME"
-          git config user.email "YOUR_GITHUB_NOREPLY_EMAIL"
+          git config user.name "alisha"
+          git config user.email "alishaofficial.xvi@gmail.com"
 
-          today=$(date +%F)
-          printf 'Last automated check-in: %s\n' "$today" > check-in.txt
+          count=$(( RANDOM % 5 + 1 ))
+          echo "Creating $count automated commits"
 
-          git add check-in.txt
-          if git diff --cached --quiet; then
-            echo "Already checked in today."
-            exit 0
-          fi
+          for i in $(seq 1 "$count"); do
+            timestamp=$(date '+%F %H:%M:%S')
+            printf 'Automated check-in: %s | %s/%s\n' \
+              "$timestamp" "$i" "$count" > check-in.txt
 
-          git commit -m "Automated daily check-in: $today"
+            git add check-in.txt
+            git commit -m "Automated check-in $i/$count: $timestamp"
+          done
+
           git push
